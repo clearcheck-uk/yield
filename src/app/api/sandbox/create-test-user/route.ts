@@ -1,33 +1,46 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 
-export async function POST(req: NextRequest) {
+export async function POST() {
   const baseUrl = process.env.HMRC_BASE_URL!
   const clientId = process.env.HMRC_CLIENT_ID!
   const clientSecret = process.env.HMRC_CLIENT_SECRET!
 
+  // Step 1: get client credentials token
   const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString('base64')
-
-  const res = await fetch(`${baseUrl}/create-test-user/individuals`, {
+  const tokenRes = await fetch(`${baseUrl}/oauth/token`, {
     method: 'POST',
     headers: {
       Authorization: `Basic ${credentials}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: 'grant_type=client_credentials&scope=write%3Auser',
+  })
+
+  if (!tokenRes.ok) {
+    const t = await tokenRes.text()
+    return NextResponse.json({ error: `Token error: ${t}` }, { status: tokenRes.status })
+  }
+
+  const { access_token } = await tokenRes.json()
+
+  // Step 2: create test user
+  const userRes = await fetch(`${baseUrl}/create-test-user/individuals`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${access_token}`,
       'Content-Type': 'application/json',
       Accept: 'application/vnd.hmrc.1.0+json',
     },
     body: JSON.stringify({
-      serviceNames: [
-        'national-insurance',
-        'self-assessment',
-        'mtd-income-tax',
-      ],
+      serviceNames: ['national-insurance', 'self-assessment', 'mtd-income-tax'],
     }),
   })
 
-  if (!res.ok) {
-    const text = await res.text()
-    return NextResponse.json({ error: text }, { status: res.status })
+  if (!userRes.ok) {
+    const t = await userRes.text()
+    return NextResponse.json({ error: `Create user error: ${t}` }, { status: userRes.status })
   }
 
-  const data = await res.json()
+  const data = await userRes.json()
   return NextResponse.json(data)
 }
