@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {
-  if (process.env.NODE_ENV === 'production') {
-    return NextResponse.json({ error: 'Not available in production' }, { status: 403 })
-  }
-
   const baseUrl = process.env.HMRC_BASE_URL!
   const clientId = process.env.HMRC_CLIENT_ID!
   const clientSecret = process.env.HMRC_CLIENT_SECRET!
