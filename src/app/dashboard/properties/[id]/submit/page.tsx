@@ -55,7 +55,6 @@ export default function SubmitPage({ params }: { params: Promise<{ id: string }>
   }, [propertyId, router])
 
   async function handleSubmit() {
-    if (!businessId) { setError('HMRC business ID not found. Please reconnect HMRC and complete setup.'); return }
     setSubmitting(true)
     setError('')
     const { data: { session } } = await supabase.auth.getSession()
@@ -187,17 +186,11 @@ export default function SubmitPage({ params }: { params: Promise<{ id: string }>
           <p className="text-xs text-gray-400 mt-3">Estimate only — actual tax depends on your personal allowance and other income.</p>
         </div>
 
-        {!businessId && (
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800">
-            HMRC setup incomplete. Go to <Link href="/dashboard" className="underline font-medium">Dashboard</Link> and reconnect HMRC to complete setup.
-          </div>
-        )}
-
         {error && <p className="text-sm text-red-600 bg-red-50 px-4 py-3 rounded-lg">{error}</p>}
 
         <button
           onClick={handleSubmit}
-          disabled={submitting || !businessId}
+          disabled={submitting}
           className="w-full bg-gray-900 text-white py-3 rounded-xl text-sm font-medium hover:bg-gray-700 disabled:opacity-50"
         >
           {submitting ? 'Submitting to HMRC...' : 'Submit quarterly update to HMRC →'}

@@ -49,6 +49,8 @@ export default function HMRCSetupPage() {
       return
     }
 
+    // businessId may be null for new landlords not yet enrolled in MTD —
+    // that is fine, HMRC will assign one on first submission
     router.push('/dashboard')
   }
 

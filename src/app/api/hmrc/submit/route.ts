@@ -24,7 +24,6 @@ export async function POST(req: NextRequest) {
     .single()
 
   if (!hmrc) return NextResponse.json({ error: 'HMRC not connected' }, { status: 400 })
-  if (!hmrc.business_id) return NextResponse.json({ error: 'HMRC setup incomplete — please re-enter your NI number' }, { status: 400 })
 
   // Refresh token if needed
   let accessToken = hmrc.access_token
@@ -55,7 +54,7 @@ export async function POST(req: NextRequest) {
 
   const result = await submitPeriodSummary(
     hmrc.nino,
-    hmrc.business_id,
+    hmrc.business_id || businessId,
     taxYear,
     {
       fromDate,
