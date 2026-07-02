@@ -13,7 +13,7 @@ export async function POST() {
       Authorization: `Basic ${credentials}`,
       'Content-Type': 'application/x-www-form-urlencoded',
     },
-    body: 'grant_type=client_credentials&scope=write%3Auser',
+    body: 'grant_type=client_credentials',
   })
 
   if (!tokenRes.ok) {
