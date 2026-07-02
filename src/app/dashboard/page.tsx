@@ -59,7 +59,7 @@ export default function Dashboard() {
     })
     const { url, error } = await res.json()
     if (error) { alert(`Failed to connect: ${error}`); return }
-    window.location.href = url
+    window.open(url, '_blank')
   }
 
   async function manageSubscription() {
