@@ -43,6 +43,7 @@ export default function TransactionsPage({ params }: { params: Promise<{ id: str
   const [rows, setRows] = useState<Row[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [saveError, setSaveError] = useState('')
   const [xeroConnected, setXeroConnected] = useState(false)
 
   useEffect(() => {
@@ -109,23 +110,39 @@ export default function TransactionsPage({ params }: { params: Promise<{ id: str
 
   async function saveAll() {
     setSaving(true)
+    setSaveError('')
     const { data: { session } } = await supabase.auth.getSession()
-    if (!session) return
+    if (!session) { router.push('/auth/login'); return }
 
     await supabase.from('transactions').delete().eq('property_id', propertyId)
-    const toInsert = rows.filter(r => r.category !== 'non_allowable' && r.amount > 0).map(r => ({
-      user_id: session.user.id,
-      property_id: propertyId,
-      xero_transaction_id: r.xero_transaction_id,
-      date: r.date,
-      description: r.description,
-      amount: Number(r.amount),
-      type: r.type,
-      category: r.category,
-      is_mortgage_interest: r.category === 'mortgage_interest',
-    }))
 
-    await supabase.from('transactions').insert(toInsert)
+    const toInsert = rows
+      .filter(r => r.category !== 'non_allowable' && Number(r.amount) > 0)
+      .map(r => ({
+        user_id: session.user.id,
+        property_id: propertyId,
+        xero_transaction_id: r.xero_transaction_id || `manual-${Date.now()}-${Math.random()}`,
+        date: r.date,
+        description: r.description || '',
+        amount: Number(r.amount),
+        type: r.type,
+        category: r.category,
+        is_mortgage_interest: r.category === 'mortgage_interest',
+      }))
+
+    if (toInsert.length === 0) {
+      setSaveError('No valid transactions to save — make sure amounts are greater than 0.')
+      setSaving(false)
+      return
+    }
+
+    const { error } = await supabase.from('transactions').insert(toInsert)
+    if (error) {
+      setSaveError(`Save failed: ${error.message}`)
+      setSaving(false)
+      return
+    }
+
     setSaving(false)
     router.push(`/dashboard/properties/${propertyId}/submit`)
   }
@@ -140,6 +157,7 @@ export default function TransactionsPage({ params }: { params: Promise<{ id: str
           <span className="text-lg font-semibold text-gray-900">Transactions</span>
         </div>
         <div className="flex items-center gap-3">
+          {saveError && <p className="text-sm text-red-600">{saveError}</p>}
           <button onClick={addRow} className="border border-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:border-gray-400">
             + Add manually
           </button>
