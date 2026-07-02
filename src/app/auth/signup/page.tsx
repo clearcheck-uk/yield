@@ -40,22 +40,40 @@ export default function Signup() {
     setLoading(true)
     setError('')
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { data: { full_name: fullName, role } },
-    })
+    let signUpError = null
+    let signUpData = null
+    try {
+      const result = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { full_name: fullName, role } },
+      })
+      signUpError = result.error
+      signUpData = result.data
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : 'Network error — please try again.')
+      setLoading(false)
+      return
+    }
 
-    if (error) {
-      const msg = typeof error.message === 'string' ? error.message : JSON.stringify(error)
+    if (signUpError) {
+      const msg = typeof signUpError.message === 'string' && signUpError.message
+        ? signUpError.message
+        : JSON.stringify(signUpError)
       if (msg.toLowerCase().includes('already registered') || msg.toLowerCase().includes('already exists')) {
         setError('An account with this email already exists. Sign in instead.')
-      } else if (msg.toLowerCase().includes('email') && msg.toLowerCase().includes('rate')) {
+      } else if (msg.toLowerCase().includes('rate')) {
         setError('Too many attempts. Please wait a minute and try again.')
       } else {
         setError(msg || 'Something went wrong. Please try again.')
       }
       setLoading(false)
+      return
+    }
+
+    // If email confirmation is off, user is immediately logged in
+    if (signUpData?.session) {
+      router.push('/dashboard')
       return
     }
 
