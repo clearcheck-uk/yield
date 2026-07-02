@@ -21,9 +21,10 @@ export function buildFraudHeaders(req: NextRequest, userId: string): Record<stri
   // Ephemeral port derived from userId (port range 1024-65535)
   const portNum = 1024 + (parseInt(hashHex.slice(0, 4), 16) % 64511)
 
-  // Vendor server IP (Vercel edge)
+  // Vendor server IP — Vercel serverless; best approximation from headers
   const vendorIp = req.headers.get('x-vercel-proxied-for')
-    || req.headers.get('x-vercel-ip')
+    || req.headers.get('x-vercel-forwarded-for')
+    || req.headers.get('x-real-ip')
     || clientIp
 
   return {
@@ -41,6 +42,7 @@ export function buildFraudHeaders(req: NextRequest, userId: string): Record<stri
     'Gov-Client-Screens': 'width=1920&height=1080&scaling-factor=1&colour-depth=24',
     'Gov-Vendor-Version': 'Yield=1.0.0',
     'Gov-Vendor-Product-Name': 'Yield',
+    'Gov-Vendor-Public-IP': vendorIp,
     'Gov-Vendor-Forwarded': `by=${encodeURIComponent(vendorIp)}&for=${encodeURIComponent(clientIp)}`,
     'Gov-Vendor-License-IDs': '',
   }
