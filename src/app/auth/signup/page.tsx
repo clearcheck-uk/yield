@@ -19,6 +19,7 @@ function EyeIcon({ open }: { open: boolean }) {
 
 export default function Signup() {
   const router = useRouter()
+  const [step, setStep] = useState<'form' | 'otp'>('form')
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -26,28 +27,112 @@ export default function Signup() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
   const [role, setRole] = useState<'landlord' | 'accountant'>('landlord')
+  const [otp, setOtp] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+
+  const inputClass = 'w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900'
 
   async function handleSignup(e: React.FormEvent) {
     e.preventDefault()
     if (password !== confirm) { setError('Passwords do not match'); return }
+    if (password.length < 8) { setError('Password must be at least 8 characters'); return }
     setLoading(true)
     setError('')
+
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: { data: { full_name: fullName, role } },
     })
+
     if (error) {
-      setError(error.message)
+      if (error.message.toLowerCase().includes('already registered') || error.message.toLowerCase().includes('already exists')) {
+        setError('An account with this email already exists. Sign in instead.')
+      } else {
+        setError(error.message)
+      }
       setLoading(false)
-    } else {
-      router.push('/dashboard')
+      return
     }
+
+    setStep('otp')
+    setLoading(false)
   }
 
-  const inputClass = 'w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900'
+  async function handleVerify(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    setError('')
+
+    const { error } = await supabase.auth.verifyOtp({
+      email,
+      token: otp.trim(),
+      type: 'signup',
+    })
+
+    if (error) {
+      setError('Invalid or expired code. Check your email and try again.')
+      setLoading(false)
+      return
+    }
+
+    router.push('/dashboard')
+  }
+
+  async function resend() {
+    setError('')
+    await supabase.auth.resend({ type: 'signup', email })
+    setError('New code sent — check your inbox.')
+  }
+
+  if (step === 'otp') {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+        <div className="w-full max-w-sm">
+          <Link href="/" className="block text-center text-xl font-semibold text-gray-900 mb-8">Yield</Link>
+          <div className="bg-white rounded-xl border border-gray-200 p-8">
+            <div className="text-center mb-6">
+              <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <h1 className="text-xl font-semibold text-gray-900">Check your email</h1>
+              <p className="text-sm text-gray-500 mt-1">We sent a 6-digit code to <span className="font-medium text-gray-700">{email}</span></p>
+            </div>
+            <form onSubmit={handleVerify} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Verification code</label>
+                <input
+                  type="text"
+                  required
+                  inputMode="numeric"
+                  maxLength={6}
+                  placeholder="000000"
+                  value={otp}
+                  onChange={e => setOtp(e.target.value.replace(/\D/g, ''))}
+                  className={inputClass + ' text-center text-2xl tracking-widest font-mono'}
+                  autoFocus
+                />
+              </div>
+              {error && <p className={`text-sm ${error.includes('sent') ? 'text-green-600' : 'text-red-600'}`}>{error}</p>}
+              <button
+                type="submit"
+                disabled={loading || otp.length < 6}
+                className="w-full bg-gray-900 text-white py-2 rounded-lg text-sm font-medium hover:bg-gray-700 disabled:opacity-50"
+              >
+                {loading ? 'Verifying...' : 'Verify email'}
+              </button>
+              <button type="button" onClick={resend} className="w-full text-sm text-gray-500 hover:text-gray-900">
+                Resend code
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
