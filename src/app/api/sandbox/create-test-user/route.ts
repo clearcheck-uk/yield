@@ -9,11 +9,8 @@ export async function POST() {
   const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString('base64')
   const tokenRes = await fetch(`${baseUrl}/oauth/token`, {
     method: 'POST',
-    headers: {
-      Authorization: `Basic ${credentials}`,
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: 'grant_type=client_credentials',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: `grant_type=client_credentials&client_id=${encodeURIComponent(clientId)}&client_secret=${encodeURIComponent(clientSecret)}`,
   })
 
   if (!tokenRes.ok) {
