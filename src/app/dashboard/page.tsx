@@ -198,7 +198,7 @@ export default function Dashboard() {
                   <p className="text-xs text-gray-500">{p.address}</p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Link href={`/dashboard/properties/${p.id}/transactions`} className="text-sm text-gray-600 hover:text-gray-900">Transactions</Link>
+                  <Link href={`/dashboard/properties/${p.id}/transactions`} className="text-sm border border-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:border-gray-400 font-medium">Transactions</Link>
                   <Link href={`/dashboard/properties/${p.id}/submit`} className="text-sm bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700">Submit →</Link>
                 </div>
               </div>
