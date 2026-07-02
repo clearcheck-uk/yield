@@ -47,10 +47,13 @@ export default function Signup() {
     })
 
     if (error) {
-      if (error.message.toLowerCase().includes('already registered') || error.message.toLowerCase().includes('already exists')) {
+      const msg = typeof error.message === 'string' ? error.message : JSON.stringify(error)
+      if (msg.toLowerCase().includes('already registered') || msg.toLowerCase().includes('already exists')) {
         setError('An account with this email already exists. Sign in instead.')
+      } else if (msg.toLowerCase().includes('email') && msg.toLowerCase().includes('rate')) {
+        setError('Too many attempts. Please wait a minute and try again.')
       } else {
-        setError(error.message)
+        setError(msg || 'Something went wrong. Please try again.')
       }
       setLoading(false)
       return
