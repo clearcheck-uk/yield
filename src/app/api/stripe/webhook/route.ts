@@ -14,11 +14,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 })
   }
 
-  const getUserId = (obj: Stripe.Subscription | Stripe.Customer) => {
-    if ('metadata' in obj) return obj.metadata?.supabase_user_id
-    return null
-  }
-
   switch (event.type) {
     case 'customer.subscription.created':
     case 'customer.subscription.updated': {

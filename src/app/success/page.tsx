@@ -9,8 +9,8 @@ export default function Success() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">You're all set</h1>
-        <p className="text-gray-500 mb-8">Your 14-day free trial has started. Let's connect your accounts.</p>
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">You&apos;re all set</h1>
+        <p className="text-gray-500 mb-8">Your 14-day free trial has started. Let&apos;s connect your accounts.</p>
         <Link href="/dashboard" className="bg-gray-900 text-white px-6 py-3 rounded-lg text-sm font-medium hover:bg-gray-700">
           Go to dashboard →
         </Link>

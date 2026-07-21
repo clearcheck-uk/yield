@@ -33,6 +33,26 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'No HMRC property business found. Your property may not be enrolled in MTD — contact HMRC to enrol.' }, { status: 400 })
     }
 
+    const { data: property } = await supabaseAdmin
+      .from('properties')
+      .select('id')
+      .eq('id', propertyId)
+      .eq('user_id', user.id)
+      .single()
+
+    if (!property) return NextResponse.json({ error: 'Property not found' }, { status: 404 })
+
+    if (obligationId) {
+      const { data: obligation } = await supabaseAdmin
+        .from('obligations')
+        .select('id')
+        .eq('id', obligationId)
+        .eq('user_id', user.id)
+        .single()
+
+      if (!obligation) return NextResponse.json({ error: 'Obligation not found' }, { status: 404 })
+    }
+
     let accessToken = hmrc.access_token
     if (new Date(hmrc.expires_at) < new Date(Date.now() + 5 * 60 * 1000)) {
       const refreshed = await refreshHMRCToken(hmrc.refresh_token)
@@ -48,6 +68,7 @@ export async function POST(req: NextRequest) {
       .from('transactions')
       .select('*')
       .eq('property_id', propertyId)
+      .eq('user_id', user.id)
       .gte('date', fromDate)
       .lte('date', toDate)
 

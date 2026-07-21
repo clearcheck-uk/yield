@@ -16,6 +16,7 @@ export default function Dashboard() {
   const [xeroConnected, setXeroConnected] = useState(false)
   const [hmrcConnected, setHmrcConnected] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [now] = useState(() => Date.now())
 
   useEffect(() => {
     async function load() {
@@ -88,7 +89,7 @@ export default function Dashboard() {
   }
 
   function daysUntil(date: string) {
-    const diff = new Date(date).getTime() - Date.now()
+    const diff = new Date(date).getTime() - now
     return Math.ceil(diff / (1000 * 60 * 60 * 24))
   }
 

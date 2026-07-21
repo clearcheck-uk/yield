@@ -6,7 +6,6 @@ export async function POST() {
   const clientSecret = process.env.HMRC_CLIENT_SECRET!
 
   // Step 1: get client credentials token
-  const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString('base64')
   const tokenRes = await fetch(`${baseUrl}/oauth/token`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
