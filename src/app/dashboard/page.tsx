@@ -74,6 +74,24 @@ export default function Dashboard() {
     if (url) window.location.href = url
   }
 
+  async function exportData() {
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) return
+    const res = await fetch('/api/account/export', {
+      headers: { Authorization: `Bearer ${session.access_token}` },
+    })
+    if (!res.ok) { alert('Export failed — please try again.'); return }
+    const blob = await res.blob()
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `yield-data-export-${new Date().toISOString().split('T')[0]}.json`
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    URL.revokeObjectURL(url)
+  }
+
   if (loading) return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <p className="text-sm text-gray-500">Loading...</p>
@@ -99,6 +117,7 @@ export default function Dashboard() {
         <span className="text-lg font-semibold text-gray-900">Yield</span>
         <div className="flex items-center gap-4">
           <button onClick={manageSubscription} className="text-sm text-gray-500 hover:text-gray-900">Billing</button>
+          <button onClick={exportData} className="text-sm text-gray-500 hover:text-gray-900">Export my data</button>
           <span className="text-sm text-gray-500">{profile?.email}</span>
           <button onClick={signOut} className="text-sm text-gray-600 hover:text-gray-900">Sign out</button>
         </div>

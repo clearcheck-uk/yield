@@ -85,7 +85,9 @@ export default function PrivacyPage() {
             <li>Data portability</li>
           </ul>
           <p className="text-gray-600 text-sm leading-relaxed mt-3">
-            To exercise any of these rights, email{' '}
+            You can download a full export of your data (properties, transactions, obligations, submissions and
+            HMRC connection details) at any time from your dashboard using the &quot;Export my data&quot; button —
+            useful if you switch providers. To exercise any other right, email{' '}
             <a href="mailto:support@yield-mtd.co.uk" className="text-blue-600 underline">support@yield-mtd.co.uk</a>.
             You also have the right to lodge a complaint with the{' '}
             <a href="https://ico.org.uk" className="text-blue-600 underline" target="_blank" rel="noreferrer">
