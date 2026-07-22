@@ -1,0 +1,4 @@
+Contact: mailto:support@yield-mtd.co.uk
+Expires: 2027-07-22T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://yield-five-sandy.vercel.app/.well-known/security.txt

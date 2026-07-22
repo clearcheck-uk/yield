@@ -16,6 +16,12 @@ export default function PrivacyPage() {
             Yield (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;). Contact us at{' '}
             <a href="mailto:support@yield-mtd.co.uk" className="text-blue-600 underline">support@yield-mtd.co.uk</a>.
           </p>
+          <p className="text-gray-600 text-sm leading-relaxed mt-3">
+            If you believe you&apos;ve found a security vulnerability or wish to report a security incident, please email{' '}
+            <a href="mailto:support@yield-mtd.co.uk" className="text-blue-600 underline">support@yield-mtd.co.uk</a>{' '}
+            — see also our{' '}
+            <a href="/.well-known/security.txt" className="text-blue-600 underline">security.txt</a>.
+          </p>
         </section>
 
         <section className="mb-8">
