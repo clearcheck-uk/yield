@@ -60,8 +60,9 @@ export default function PrivacyPage() {
         <section className="mb-8">
           <h2 className="text-lg font-semibold text-gray-900 mb-3">5. Where your data is stored</h2>
           <p className="text-gray-600 text-sm leading-relaxed">
-            Your data is stored in the United States (Supabase and Vercel). Both providers are covered by
-            the UK–US Data Bridge adequacy agreement, which provides equivalent data protection to UK GDPR.
+            Your database is hosted by Supabase in Paris, France (within the European Economic Area). The
+            application itself runs on Vercel&apos;s infrastructure in London, United Kingdom. Your data
+            does not leave the UK/EEA.
           </p>
         </section>
 
