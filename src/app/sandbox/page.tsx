@@ -54,7 +54,7 @@ export default function SandboxPage() {
                 {user.saUtr && <div><span className="text-gray-500">SA UTR:</span> <span className="font-bold text-gray-900 select-all">{user.saUtr}</span></div>}
                 {user.mtdItId && <div><span className="text-gray-500">MTD ID:</span> <span className="font-bold text-gray-900 select-all">{user.mtdItId}</span></div>}
               </div>
-              <p className="text-xs text-gray-400">Use this NI number in the HMRC setup step after connecting. Use the username + password to sign in on the HMRC sandbox login page.</p>
+              <p className="text-xs text-gray-600">Use this NI number in the HMRC setup step after connecting. Use the username + password to sign in on the HMRC sandbox login page.</p>
             </div>
           )}
         </div>

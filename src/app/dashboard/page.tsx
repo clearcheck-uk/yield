@@ -167,7 +167,7 @@ export default function Dashboard() {
                   <div>
                     <p className="text-sm font-medium text-gray-900">{propertyName(ob.property_id)}</p>
                     <p className="text-xs text-gray-500">Quarter: {ob.period_start} → {ob.period_end}</p>
-                    <p className={`text-xs font-medium mt-1 ${days <= 14 ? 'text-amber-600' : 'text-gray-400'}`}>
+                    <p className={`text-xs font-medium mt-1 ${days <= 14 ? 'text-amber-600' : 'text-gray-600'}`}>
                       Due {ob.due_date} {days <= 30 ? `(${days} days)` : ''}
                     </p>
                   </div>
@@ -188,7 +188,7 @@ export default function Dashboard() {
           </div>
           {properties.length === 0 ? (
             <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
-              <p className="text-sm text-gray-400 mb-4">No properties yet</p>
+              <p className="text-sm text-gray-600 mb-4">No properties yet</p>
               <Link href="/dashboard/properties/new" className="text-sm bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700">Add your first property</Link>
             </div>
           ) : (

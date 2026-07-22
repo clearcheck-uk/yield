@@ -45,19 +45,19 @@ export default function NewProperty() {
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b border-gray-100 px-6 py-4 flex items-center gap-4">
-        <Link href="/dashboard" className="text-gray-400 hover:text-gray-600 text-sm">← Back</Link>
+        <Link href="/dashboard" className="text-gray-600 hover:text-gray-900 text-sm">← Back</Link>
         <span className="text-lg font-semibold text-gray-900">Add property</span>
       </header>
       <main className="max-w-lg mx-auto px-6 py-12">
         <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-gray-200 p-8 space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Property name</label>
-            <input type="text" required placeholder="e.g. 12 Oak Street flat" value={form.name} onChange={e => set('name', e.target.value)} className={inputClass} />
-            <p className="text-xs text-gray-400 mt-1">A short name to identify this property</p>
+            <label htmlFor="propertyName" className="block text-sm font-medium text-gray-700 mb-1">Property name</label>
+            <input id="propertyName" type="text" required placeholder="e.g. 12 Oak Street flat" value={form.name} onChange={e => set('name', e.target.value)} className={inputClass} />
+            <p className="text-xs text-gray-600 mt-1">A short name to identify this property</p>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Full address</label>
-            <textarea required rows={2} value={form.address} onChange={e => set('address', e.target.value)} className={inputClass} />
+            <label htmlFor="propertyAddress" className="block text-sm font-medium text-gray-700 mb-1">Full address</label>
+            <textarea id="propertyAddress" required rows={2} value={form.address} onChange={e => set('address', e.target.value)} className={inputClass} />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Property type</label>
@@ -82,8 +82,9 @@ export default function NewProperty() {
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Your ownership share (%)</label>
+            <label htmlFor="ownershipPercentage" className="block text-sm font-medium text-gray-700 mb-1">Your ownership share (%)</label>
             <input
+              id="ownershipPercentage"
               type="number"
               min={1}
               max={100}
@@ -91,7 +92,7 @@ export default function NewProperty() {
               onChange={e => set('ownership_percentage', Number(e.target.value))}
               className={inputClass}
             />
-            <p className="text-xs text-gray-400 mt-1">Enter 50 if jointly owned. Yield calculates your share automatically.</p>
+            <p className="text-xs text-gray-600 mt-1">Enter 50 if jointly owned. Yield calculates your share automatically.</p>
           </div>
           {error && <p className="text-sm text-red-600">{error}</p>}
           <button type="submit" disabled={loading} className="w-full bg-gray-900 text-white py-2 rounded-lg text-sm font-medium hover:bg-gray-700 disabled:opacity-50">

@@ -124,8 +124,9 @@ export default function Signup() {
             </div>
             <form onSubmit={handleVerify} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Verification code</label>
+                <label htmlFor="otp" className="block text-sm font-medium text-gray-700 mb-1">Verification code</label>
                 <input
+                  id="otp"
                   type="text"
                   required
                   inputMode="numeric"
@@ -163,17 +164,18 @@ export default function Signup() {
           <h1 className="text-xl font-semibold text-gray-900 mb-6">Create account</h1>
           <form onSubmit={handleSignup} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Full name</label>
-              <input type="text" required value={fullName} onChange={e => setFullName(e.target.value)} className={inputClass} />
+              <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">Full name</label>
+              <input id="fullName" type="text" required value={fullName} onChange={e => setFullName(e.target.value)} className={inputClass} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-              <input type="email" required value={email} onChange={e => setEmail(e.target.value)} className={inputClass} />
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <input id="email" type="email" required value={email} onChange={e => setEmail(e.target.value)} className={inputClass} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">Password</label>
               <div className="relative">
                 <input
+                  id="password"
                   type={showPassword ? 'text' : 'password'}
                   required
                   minLength={8}
@@ -181,22 +183,23 @@ export default function Signup() {
                   onChange={e => setPassword(e.target.value)}
                   className={inputClass + ' pr-10'}
                 />
-                <button type="button" onClick={() => setShowPassword(v => !v)} aria-label={showPassword ? 'Hide password' : 'Show password'} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                <button type="button" onClick={() => setShowPassword(v => !v)} aria-label={showPassword ? 'Hide password' : 'Show password'} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-900">
                   <EyeIcon open={showPassword} />
                 </button>
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Confirm password</label>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">Confirm password</label>
               <div className="relative">
                 <input
+                  id="confirmPassword"
                   type={showConfirm ? 'text' : 'password'}
                   required
                   value={confirm}
                   onChange={e => setConfirm(e.target.value)}
                   className={inputClass + ' pr-10'}
                 />
-                <button type="button" onClick={() => setShowConfirm(v => !v)} aria-label={showConfirm ? 'Hide password' : 'Show password'} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                <button type="button" onClick={() => setShowConfirm(v => !v)} aria-label={showConfirm ? 'Hide password' : 'Show password'} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-900">
                   <EyeIcon open={showConfirm} />
                 </button>
               </div>

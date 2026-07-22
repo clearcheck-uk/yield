@@ -36,7 +36,7 @@ export default function Home() {
             Already have an account →
           </Link>
         </div>
-        <p className="text-xs text-gray-400 mt-4">No credit card required during trial</p>
+        <p className="text-xs text-gray-600 mt-4">No credit card required during trial</p>
       </section>
 
       {/* How it works */}
@@ -181,11 +181,11 @@ export default function Home() {
       </section>
 
       <footer className="border-t border-gray-100 px-6 py-8 max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-        <span className="text-sm text-gray-400">© {new Date().getFullYear()} Yield. Making Tax Digital Income Tax software.</span>
-        <div className="flex items-center gap-6 text-sm text-gray-400">
-          <Link href="/privacy" className="hover:text-gray-600">Privacy</Link>
-          <Link href="/terms" className="hover:text-gray-600">Terms</Link>
-          <a href="mailto:support@yield-mtd.co.uk" className="hover:text-gray-600">Contact</a>
+        <span className="text-sm text-gray-600">© {new Date().getFullYear()} Yield. Making Tax Digital Income Tax software.</span>
+        <div className="flex items-center gap-6 text-sm text-gray-600">
+          <Link href="/privacy" className="hover:text-gray-900">Privacy</Link>
+          <Link href="/terms" className="hover:text-gray-900">Terms</Link>
+          <a href="mailto:support@yield-mtd.co.uk" className="hover:text-gray-900">Contact</a>
         </div>
       </footer>
     </main>

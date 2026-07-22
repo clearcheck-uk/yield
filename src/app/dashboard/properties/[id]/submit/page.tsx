@@ -123,7 +123,7 @@ export default function SubmitPage({ params }: { params: Promise<{ id: string }>
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b border-gray-100 px-6 py-4 flex items-center gap-4">
-        <Link href={`/dashboard/properties/${propertyId}/transactions`} className="text-gray-400 hover:text-gray-600 text-sm">← Back</Link>
+        <Link href={`/dashboard/properties/${propertyId}/transactions`} className="text-gray-600 hover:text-gray-900 text-sm">← Back</Link>
         <span className="text-lg font-semibold text-gray-900">Review & submit</span>
       </header>
 
@@ -183,7 +183,7 @@ export default function SubmitPage({ params }: { params: Promise<{ id: string }>
               <span>£{s24.estimatedTax.total.toFixed(2)}</span>
             </div>
           </div>
-          <p className="text-xs text-gray-400 mt-3">Estimate only — actual tax depends on your personal allowance and other income.</p>
+          <p className="text-xs text-gray-600 mt-3">Estimate only — actual tax depends on your personal allowance and other income.</p>
         </div>
 
         {error && <p className="text-sm text-red-600 bg-red-50 px-4 py-3 rounded-lg">{error}</p>}
@@ -195,7 +195,7 @@ export default function SubmitPage({ params }: { params: Promise<{ id: string }>
         >
           {submitting ? 'Submitting to HMRC...' : 'Submit quarterly update to HMRC →'}
         </button>
-        <p className="text-xs text-gray-400 text-center">This will submit a quarterly Period Summary to HMRC via the MTD Income Tax API.</p>
+        <p className="text-xs text-gray-600 text-center">This will submit a quarterly Period Summary to HMRC via the MTD Income Tax API.</p>
       </main>
     </div>
   )

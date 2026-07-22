@@ -70,10 +70,11 @@ export default function HMRCSetupPage() {
         <div className="bg-white rounded-xl border border-gray-200 p-8">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="nino" className="block text-sm font-medium text-gray-700 mb-1">
                 National Insurance number
               </label>
               <input
+                id="nino"
                 type="text"
                 required
                 placeholder="AA 12 34 56 A"
@@ -82,7 +83,7 @@ export default function HMRCSetupPage() {
                 maxLength={13}
                 className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-900 font-mono tracking-widest focus:outline-none focus:ring-2 focus:ring-gray-900 uppercase"
               />
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-xs text-gray-600 mt-1">
                 Found on your payslip, P60, or HMRC letters
               </p>
             </div>

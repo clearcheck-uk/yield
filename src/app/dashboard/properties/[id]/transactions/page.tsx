@@ -153,7 +153,7 @@ export default function TransactionsPage({ params }: { params: Promise<{ id: str
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link href="/dashboard" className="text-gray-400 hover:text-gray-600 text-sm">← Back</Link>
+          <Link href="/dashboard" className="text-gray-600 hover:text-gray-900 text-sm">← Back</Link>
           <span className="text-lg font-semibold text-gray-900">Transactions</span>
         </div>
         <div className="flex items-center gap-3">
@@ -177,7 +177,7 @@ export default function TransactionsPage({ params }: { params: Promise<{ id: str
 
         {rows.length === 0 ? (
           <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-            <p className="text-gray-400 text-sm mb-4">No transactions yet</p>
+            <p className="text-gray-600 text-sm mb-4">No transactions yet</p>
             <div className="flex items-center justify-center gap-3">
               <button onClick={addRow} className="text-sm bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
                 + Add transaction manually
@@ -206,26 +206,26 @@ export default function TransactionsPage({ params }: { params: Promise<{ id: str
                 {rows.map((row, i) => (
                   <tr key={row.xero_transaction_id || i} className="hover:bg-gray-50">
                     <td className="px-4 py-3">
-                      <input type="date" value={row.date} onChange={e => updateRow(i, 'date', e.target.value)}
+                      <input type="date" aria-label="Date" value={row.date} onChange={e => updateRow(i, 'date', e.target.value)}
                         className="border border-gray-200 rounded px-2 py-1 text-xs text-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900" />
                     </td>
                     <td className="px-4 py-3">
-                      <input type="text" value={row.description} onChange={e => updateRow(i, 'description', e.target.value)}
+                      <input type="text" aria-label="Description" value={row.description} onChange={e => updateRow(i, 'description', e.target.value)}
                         placeholder="Description" className="border border-gray-200 rounded px-2 py-1 text-xs text-gray-900 w-full focus:outline-none focus:ring-1 focus:ring-gray-900" />
                     </td>
                     <td className="px-4 py-3">
-                      <select value={row.type} onChange={e => updateRow(i, 'type', e.target.value)}
+                      <select aria-label="Type" value={row.type} onChange={e => updateRow(i, 'type', e.target.value)}
                         className="border border-gray-200 rounded px-2 py-1 text-xs text-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900">
                         <option value="income">Income</option>
                         <option value="expense">Expense</option>
                       </select>
                     </td>
                     <td className="px-4 py-3">
-                      <input type="number" min="0" step="0.01" value={row.amount} onChange={e => updateRow(i, 'amount', e.target.value)}
+                      <input type="number" min="0" step="0.01" aria-label="Amount" value={row.amount} onChange={e => updateRow(i, 'amount', e.target.value)}
                         className="border border-gray-200 rounded px-2 py-1 text-xs text-gray-900 text-right w-24 focus:outline-none focus:ring-1 focus:ring-gray-900" />
                     </td>
                     <td className="px-4 py-3">
-                      <select value={row.category} onChange={e => updateRow(i, 'category', e.target.value as TransactionCategory)}
+                      <select aria-label="Category" value={row.category} onChange={e => updateRow(i, 'category', e.target.value as TransactionCategory)}
                         className="border border-gray-200 rounded-lg px-2 py-1 text-xs text-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 w-full">
                         {CATEGORIES.map(c => (
                           <option key={c.value} value={c.value}>{c.label}</option>
@@ -233,7 +233,7 @@ export default function TransactionsPage({ params }: { params: Promise<{ id: str
                       </select>
                     </td>
                     <td className="px-4 py-3">
-                      <button onClick={() => removeRow(i)} className="text-gray-300 hover:text-red-500 text-lg leading-none">×</button>
+                      <button onClick={() => removeRow(i)} aria-label="Remove transaction" className="text-gray-600 hover:text-red-500 text-lg leading-none">×</button>
                     </td>
                   </tr>
                 ))}
