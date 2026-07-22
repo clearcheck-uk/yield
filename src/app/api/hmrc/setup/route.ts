@@ -3,6 +3,7 @@ import { supabaseAdmin } from '@/lib/supabase/server'
 import { getBusinesses, getObligations } from '@/lib/hmrc/api'
 import { buildFraudHeaders } from '@/lib/hmrc/fraud-headers'
 import { refreshHMRCToken } from '@/lib/hmrc/oauth'
+import { encrypt, decrypt } from '@/lib/crypto'
 
 export async function POST(req: NextRequest) {
   const authHeader = req.headers.get('authorization')
@@ -23,13 +24,13 @@ export async function POST(req: NextRequest) {
 
   if (!hmrc) return NextResponse.json({ error: 'HMRC not connected — please reconnect' }, { status: 400 })
 
-  let accessToken = hmrc.access_token
+  let accessToken = decrypt(hmrc.access_token)
   if (new Date(hmrc.expires_at) < new Date(Date.now() + 5 * 60 * 1000)) {
-    const refreshed = await refreshHMRCToken(hmrc.refresh_token)
+    const refreshed = await refreshHMRCToken(decrypt(hmrc.refresh_token))
     accessToken = refreshed.access_token
     await supabaseAdmin.from('hmrc_connections').update({
-      access_token: refreshed.access_token,
-      refresh_token: refreshed.refresh_token,
+      access_token: encrypt(refreshed.access_token),
+      refresh_token: encrypt(refreshed.refresh_token),
       expires_at: new Date(Date.now() + refreshed.expires_in * 1000).toISOString(),
     }).eq('id', user.id)
   }
@@ -51,7 +52,7 @@ export async function POST(req: NextRequest) {
 
   // Save NI number and business ID
   await supabaseAdmin.from('hmrc_connections').update({
-    nino,
+    nino: encrypt(nino),
     business_id: businessId,
   }).eq('id', user.id)
 

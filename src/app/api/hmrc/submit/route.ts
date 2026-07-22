@@ -4,6 +4,7 @@ import { submitPeriodSummary } from '@/lib/hmrc/api'
 import { buildFraudHeaders } from '@/lib/hmrc/fraud-headers'
 import { mapToHMRCExpenses } from '@/lib/hmrc/section24'
 import { refreshHMRCToken } from '@/lib/hmrc/oauth'
+import { encrypt, decrypt } from '@/lib/crypto'
 
 export const maxDuration = 30
 
@@ -26,7 +27,8 @@ export async function POST(req: NextRequest) {
       .single()
 
     if (!hmrc) return NextResponse.json({ error: 'HMRC not connected' }, { status: 400 })
-    if (!hmrc.nino) return NextResponse.json({ error: 'NI number not set — please complete HMRC setup' }, { status: 400 })
+    const nino = decrypt(hmrc.nino)
+    if (!nino) return NextResponse.json({ error: 'NI number not set — please complete HMRC setup' }, { status: 400 })
 
     const effectiveBusinessId = hmrc.business_id || businessId
     if (!effectiveBusinessId) {
@@ -53,13 +55,13 @@ export async function POST(req: NextRequest) {
       if (!obligation) return NextResponse.json({ error: 'Obligation not found' }, { status: 404 })
     }
 
-    let accessToken = hmrc.access_token
+    let accessToken = decrypt(hmrc.access_token)
     if (new Date(hmrc.expires_at) < new Date(Date.now() + 5 * 60 * 1000)) {
-      const refreshed = await refreshHMRCToken(hmrc.refresh_token)
+      const refreshed = await refreshHMRCToken(decrypt(hmrc.refresh_token))
       accessToken = refreshed.access_token
       await supabaseAdmin.from('hmrc_connections').update({
-        access_token: refreshed.access_token,
-        refresh_token: refreshed.refresh_token,
+        access_token: encrypt(refreshed.access_token),
+        refresh_token: encrypt(refreshed.refresh_token),
         expires_at: new Date(Date.now() + refreshed.expires_in * 1000).toISOString(),
       }).eq('id', user.id)
     }
@@ -82,7 +84,7 @@ export async function POST(req: NextRequest) {
     let result = null
     try {
       result = await submitPeriodSummary(
-        hmrc.nino,
+        nino,
         effectiveBusinessId,
         taxYear,
         {

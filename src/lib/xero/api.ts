@@ -1,5 +1,6 @@
 import { refreshXeroToken } from './oauth'
 import { supabaseAdmin } from '@/lib/supabase/server'
+import { encrypt, decrypt } from '@/lib/crypto'
 
 async function getValidToken(userId: string): Promise<{ accessToken: string; tenantId: string }> {
   const { data: conn } = await supabaseAdmin
@@ -12,16 +13,16 @@ async function getValidToken(userId: string): Promise<{ accessToken: string; ten
 
   // Refresh if expires within 5 minutes
   if (new Date(conn.expires_at) < new Date(Date.now() + 5 * 60 * 1000)) {
-    const tokens = await refreshXeroToken(conn.refresh_token)
+    const tokens = await refreshXeroToken(decrypt(conn.refresh_token))
     await supabaseAdmin.from('xero_connections').update({
-      access_token: tokens.access_token,
-      refresh_token: tokens.refresh_token,
+      access_token: encrypt(tokens.access_token),
+      refresh_token: encrypt(tokens.refresh_token),
       expires_at: new Date(Date.now() + tokens.expires_in * 1000).toISOString(),
     }).eq('user_id', userId)
     return { accessToken: tokens.access_token, tenantId: conn.tenant_id }
   }
 
-  return { accessToken: conn.access_token, tenantId: conn.tenant_id }
+  return { accessToken: decrypt(conn.access_token), tenantId: conn.tenant_id }
 }
 
 async function xeroFetch(path: string, accessToken: string, tenantId: string) {

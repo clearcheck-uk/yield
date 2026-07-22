@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { exchangeXeroCode, getXeroTenants } from '@/lib/xero/oauth'
 import { supabaseAdmin } from '@/lib/supabase/server'
+import { encrypt } from '@/lib/crypto'
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
@@ -22,8 +23,8 @@ export async function GET(req: NextRequest) {
       user_id: userId,
       tenant_id: tenant.tenantId,
       tenant_name: tenant.tenantName,
-      access_token: tokens.access_token,
-      refresh_token: tokens.refresh_token,
+      access_token: encrypt(tokens.access_token),
+      refresh_token: encrypt(tokens.refresh_token),
       expires_at: new Date(Date.now() + tokens.expires_in * 1000).toISOString(),
     })
 
