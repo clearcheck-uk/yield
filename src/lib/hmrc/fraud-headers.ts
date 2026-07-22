@@ -44,6 +44,9 @@ export function buildFraudHeaders(req: NextRequest, userId: string): Record<stri
     'Gov-Vendor-Product-Name': 'Yield',
     'Gov-Vendor-Public-IP': vendorIp,
     'Gov-Vendor-Forwarded': `by=${encodeURIComponent(vendorIp)}&for=${encodeURIComponent(clientIp)}`,
+    // No per-device license key system (plain web SaaS) — HMRC's documented convention
+    // for genuinely inapplicable headers is to send an empty value, not omit it.
+    // See docs/fraud-prevention-headers.md.
     'Gov-Vendor-License-IDs': '',
   }
 }
